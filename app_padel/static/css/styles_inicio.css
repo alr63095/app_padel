@@ -1,0 +1,117 @@
+/* Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilos para la barra lateral */
+.sidebar {
+    position: fixed;
+    left: -150px; /* Inicialmente oculta pero estrecha */
+    top: 0;
+    bottom: 0;
+    width: 200px; /* Ancho estrecho */
+    background-color: #333; /* Color de fondo */
+    padding-top: 60px;
+    transition: left 0.3s ease, opacity 0.3s ease; /* Añadir transición de opacidad */
+    opacity: 0.9; /* Opacidad inicial */
+}
+
+.active {
+    left: 0; /* Mostrar el menú cuando está activo */
+    opacity: 1; /* Ajustar opacidad cuando está activo */
+}
+
+.logo {
+    color: #fff; /* Color del texto del logo */
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+    text-align: center;
+    background-image: url('../images/pala.jpg');
+    width: fit-content;
+    height: fit-content;
+    background-size: cover;
+}
+
+/* Estilos para las opciones del menú */
+.menu-options {
+    padding-top: 20px;
+}
+
+.menu-options a {
+    display: block;
+    color: #fff; /* Color del texto del menú */
+    text-decoration: none;
+    padding: 15px 20px;
+    transition: background-color 0.3s ease; /* Transición al pasar el ratón por encima */
+}
+
+.menu-options a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Color de fondo al pasar el ratón por encima */
+}
+
+/* Estilos para el botón de hamburguesa */
+.hamburger-menu {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 999; /* Asegura que esté sobre el contenido */
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+    transition: background-color 0.3s ease; /* Transición al pasar el ratón por encima */
+}
+
+.bar:hover {
+    background-color: rgba(255, 255, 255, 0.7); /* Color de fondo al pasar el ratón por encima */
+}
+
+/* Estilos para el contenido principal */
+.content {
+    margin-left: 50px; /* Inicialmente sin margen */
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.content.active {
+    margin-left: 200px; /* Margen cuando la barra lateral está activa */
+}
+
+/* Estilos para el botón de salir */
+.logout-btn {
+    position: absolute;
+    bottom: 10px; /* Colocarlo en la parte inferior */
+    left: 10px; /* Colocarlo en la parte izquierda */
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #666;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #333;
+}
+
+.contenedor-imagenes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.imagen-pista {
+    width: calc(33.33% - 20px); /* Ajusta el tamaño de la imagen para ocupar aproximadamente un tercio del ancho del contenedor */
+    margin-bottom: 20px;
+    background-image: url('../images/pista_padel.jpg');
+}
+
+.contenido-bloque {
+    text-align: center;
+}

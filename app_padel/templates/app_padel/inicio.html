@@ -1,0 +1,60 @@
+{% extends 'app_padel/base.html' %} 
+{% block content %}
+
+ <!-- Contenido principal -->
+ <div class="content" id="content">
+    <!-- Barra superior con icono de perfil -->
+    <div class="profile">
+        <i class="bi bi-person-fill"></i>
+    </div>
+    <h1>Bienvenido, {{ username }}</h1>
+    <!-- Botones en el centro -->
+    <div class="buttons">
+        <button class="button">Botón 1</button>
+        <button class="button">Botón 2</button>
+        <button class="button">Botón 3</button>
+    </div>
+    <h1>Selecciona un club:</h1>
+    <select id="club-selector">
+        <option value="-1">Selecciona</option>
+        {% for club in clubs %}
+            <option value="{{ club.id }}">{{ club.nombre }}</option>
+        {% endfor %}
+    </select>
+    <div class="contenedor-imagenes">
+        <!-- Aquí se mostrarán las imágenes de las pistas -->
+        {% for _ in clubs %}
+            <img class="imagen-pista">
+        {% endfor %}
+    </div>
+</div>
+ <!-- Tu script JavaScript aquí -->
+ <script>
+     // Obtener referencia al elemento de selección
+     var clubSelector = document.getElementById('club-selector');
+    // Obtener referencia al contenedor de las imágenes
+    var contenedorImagenes = document.querySelector('.contenedor-imagenes');
+
+    // Asignar evento de cambio al elemento de selección
+    clubSelector.addEventListener('change', function() {
+        // Obtener el valor seleccionado
+        var clubId = this.value;
+        if (clubId > 0){
+            // Realizar una solicitud AJAX para obtener el número de pistas
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/obtener_numero_pistas/?club_id=' + clubId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+                    if (respuesta.numero_pistas) {
+                        contenedorImagenes.innerHTML = 'El club tiene ' + respuesta.numero_pistas + ' pistas';
+                    }
+                }
+            };
+            xhr.send();
+        }
+        contenedorImagenes.innerHTML = "";
+    });
+</script>
+
+{% endblock %}

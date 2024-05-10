@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padel_App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="/static/css/styles_inicio.css">
+</head>
+<body>
+     <!-- Barra lateral izquierda con menú hamburguesa -->
+     <div class="sidebar" id="sidebar">
+        <!-- Opciones de menú -->
+        <div class="menu-options" id="menuOptions">
+            <a class="logo" href="{% url 'inicio' %}">Inicio</a>
+            <a href="#">Mis Reservas</a>
+            <a href="{% url 'crear_reserva' %}">Reservar</a>
+            <a href="#">Clubs</a>
+            <a href="#">Contacto</a>
+        </div>
+        <!-- Botón de salir -->
+        <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+    </div>
+
+    <!-- Botón de hamburguesa -->
+    <div class="hamburger-menu" onclick="toggleSidebar()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <div id="contenido-bloque">
+    {% block content %}
+    {% endblock %}
+    </div>
+    <!-- Script para manejar el despliegue del menú -->
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("content");
+            sidebar.classList.toggle("active");
+            content.classList.toggle("active");
+        }
+        $("#contenido-bloque").css("text-align", "center");
+    </script>
+</body>
+</html>
