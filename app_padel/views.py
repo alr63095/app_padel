@@ -35,7 +35,7 @@ def inicio(request):
         form = ReservaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('inicio')  # Reemplaza 'nombre_de_la_ruta' con el nombre de la ruta a la que deseas redirigir
+            return redirect('inicio') 
     if 'username' in request.POST:
         if request.POST['username']:
             vars['username'] = request.POST['username']
@@ -52,7 +52,8 @@ def registro(request):
         form = RegistroForm(request.POST)
         if form.is_valid():
             form.save()
-            return inicio(request)
+            messages.success(request, '¡Registro exitoso! Por favor, inicia sesión.')
+            return redirect('login')
     else:
         form = RegistroForm()
     return render(request, 'app_padel/registro.html', {'form': form})
@@ -69,7 +70,7 @@ def crear_reserva(request):
         if form.is_valid():
             form.save()
             # Redirigir a alguna página después de crear la reserva (por ejemplo, la página de inicio)
-            return redirect('inicio')  # Reemplaza 'nombre_de_la_ruta' con el nombre de la ruta a la que deseas redirigir
+            return redirect('inicio')
     else:
         form = ReservaForm()
     return render(request, 'app_padel/nuevaReserva.html', {'form': form})
@@ -78,7 +79,7 @@ def obtener_numero_pistas(request):
     if request.method == 'GET' and 'club_id' in request.GET:
         club_id = request.GET['club_id']
         club_id_n = int(club_id)
-        if club_id_n > 0 :   
+        if club_id_n > 0:
             numero_pistas = Pista.objects.filter(club_id=club_id).count()
             return JsonResponse({'numero_pistas': numero_pistas})
     else:
