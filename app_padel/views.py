@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegistroForm,ReservaForm
-from .models import Club,Pista
+from .models import Club,Pista,Reserva
 from django.http import JsonResponse
 
 
@@ -31,6 +31,11 @@ def login_app(request):
 @login_required
 def inicio(request):
     vars = {}
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inicio')  # Reemplaza 'nombre_de_la_ruta' con el nombre de la ruta a la que deseas redirigir
     if 'username' in request.POST:
         if request.POST['username']:
             vars['username'] = request.POST['username']
@@ -38,6 +43,8 @@ def inicio(request):
             return login_app
     clubs = Club.objects.all()
     vars['clubs'] = clubs
+    form = ReservaForm()
+    vars['form'] = form
     return render(request, 'app_padel/inicio.html',vars) 
 
 def registro(request):
@@ -62,7 +69,7 @@ def crear_reserva(request):
         if form.is_valid():
             form.save()
             # Redirigir a alguna página después de crear la reserva (por ejemplo, la página de inicio)
-            return redirect('nombre_de_la_ruta')  # Reemplaza 'nombre_de_la_ruta' con el nombre de la ruta a la que deseas redirigir
+            return redirect('inicio')  # Reemplaza 'nombre_de_la_ruta' con el nombre de la ruta a la que deseas redirigir
     else:
         form = ReservaForm()
     return render(request, 'app_padel/nuevaReserva.html', {'form': form})
@@ -76,3 +83,34 @@ def obtener_numero_pistas(request):
             return JsonResponse({'numero_pistas': numero_pistas})
     else:
         return JsonResponse({'error': 'No se proporcionó el ID del club'})
+    
+def misReservas(request):
+    # Obtener todas las reservas del usuario actual
+    reservas = Reserva.objects.filter(usuario=request.user)
+    return render(request, 'app_padel/misReservas.html', {'reservas': reservas})
+
+def actualizarReserva(request, reserva_id):
+    # Obtener la reserva a actualizar
+    reserva = Reserva.objects.get(id=reserva_id)
+
+    if request.method == 'POST':
+        # Crear un formulario de reserva con los datos de la reserva existente y los datos proporcionados en el formulario
+        form = ReservaForm(request.POST, instance=reserva)
+        if form.is_valid():
+            # Guardar los cambios en la reserva
+            form.save()
+            return redirect('misReservas')  # Redireccionar a la vista de misReservas
+    else:
+        # Crear un formulario de reserva con los datos de la reserva existente
+        form = ReservaForm(instance=reserva)
+
+    return render(request, 'app_padel/actualizar_reserva.html', {'form': form})
+
+def delete_reserva(request, reserva_id):
+    # Obtener la reserva a eliminar
+    reserva = get_object_or_404(Reserva, pk=reserva_id)
+
+    # Cambiar el valor de 'activo' a False
+    reserva.activo = False
+    reserva.save()
+    return redirect('inicio')

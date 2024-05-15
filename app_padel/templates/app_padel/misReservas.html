@@ -2,6 +2,22 @@
 {% block content %}
 <body>
     
+    <h1>Mis Reservas</h1>
+    <ul>
+        {% for reserva in reservas %}
+            <div class="row">
+                <div class="card w-75 col m-2">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ reserva.fecha}}</h5>
+                        <p class="card-text">{{ reserva.hora }}</p>
+                        <p class="card-text">{{ reserva.pista }}</p>
+                        <a href={% url "actualizarReserva" reserva.id %} class="btn btn-primary">Update</a>
+                        <a href={% url "delete" reserva.id %} class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </ul>
 </body>
 
 {% endblock %}

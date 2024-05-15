@@ -27,7 +27,22 @@
             <img class="imagen-pista">
         {% endfor %}
     </div>
+    <div id="contenedor-banners">
+
+    </div>
 </div>
+<!-- Modal para crear una reserva -->
+<div id="modal-reserva" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <h2>Reservar pista</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear Reserva</button>
+    </form>
+    </div>
+  </div>
  <!-- Tu script JavaScript aquí -->
  <script>
      // Obtener referencia al elemento de selección
@@ -35,25 +50,77 @@
     // Obtener referencia al contenedor de las imágenes
     var contenedorImagenes = document.querySelector('.contenedor-imagenes');
 
+    function botonPistas(){
+        $('.banner-pista img').click(function() {
+        // Mostrar el modal
+            $('#modal-reserva').show();
+        });
+    }
     // Asignar evento de cambio al elemento de selección
     clubSelector.addEventListener('change', function() {
         // Obtener el valor seleccionado
         var clubId = this.value;
         if (clubId > 0){
-            // Realizar una solicitud AJAX para obtener el número de pistas
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/obtener_numero_pistas/?club_id=' + clubId, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var respuesta = JSON.parse(xhr.responseText);
-                    if (respuesta.numero_pistas) {
-                        contenedorImagenes.innerHTML = 'El club tiene ' + respuesta.numero_pistas + ' pistas';
-                    }
-                }
-            };
-            xhr.send();
+            $.ajax({
+            url: '/obtener_numero_pistas/',
+            method: 'GET',
+            data: {club_id: clubId},
+            success: function(response) {
+                // Limpiar el contenedor de banners
+                $('#contenedor-banners').empty();
+                // Iterar sobre las pistas y crear un banner para cada una
+                for (var i = 0; i < response.numero_pistas; i++) {
+                    // Crear un nuevo elemento div para el banner de la pista
+                    var banner = $('<div class="banner-pista" style="padding:1em;"></div>');
+                    // Crear un elemento img para la imagen de la pista
+                    var imagen = $('<img src="../../static/images/pista_padel.jpg">');
+
+                    // Agregar la imagen al banner
+                    banner.append(imagen);
+
+                    // Agregar el banner al contenedor
+                    $('#contenedor-banners').append(banner);
+                    botonPistas();
+                };
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar las pistas del club:', error);
+            }
+        });
         }
         contenedorImagenes.innerHTML = "";
+    });
+
+    $(document).ready(function() {
+        $('#modal-reserva').hide();
+        // Manejar el evento de clic en la imagen del banner
+        $('.banner-pista img').click(function() {
+            // Mostrar el modal
+            $('#modal-reserva').show();
+        });
+
+        // Manejar el evento de clic en el botón de cerrar del modal
+        $('#modal-reserva .cerrar').click(function() {
+            // Ocultar el modal
+            $('#modal-reserva').hide();
+        });
+
+        // Manejar el envío del formulario de reserva
+        $('#formulario-reserva').submit(function(event) {
+            // Prevenir el envío del formulario
+            event.preventDefault();
+
+            // Aquí puedes manejar el envío del formulario utilizando AJAX
+            // Por ejemplo, puedes enviar los datos del formulario a tu servidor y procesarlos en tu aplicación Django
+        });
+        
+        // Evento de cambio en el selector de clubes
+        $('#club-selector').change(function() {
+            // Obtener el ID del club seleccionado
+            var clubId = $(this).val();
+
+        });
+        
     });
 </script>
 

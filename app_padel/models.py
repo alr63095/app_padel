@@ -6,6 +6,7 @@ from django.utils import timezone
 class Club(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.CharField(max_length=200)
+    activo = models.BooleanField(default=1)
     # Otros campos para la información del club
 
     def __str__(self):
@@ -15,6 +16,7 @@ class Pista(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE)
     numero = models.IntegerField()
     descripcion = models.CharField(max_length=100,default="")
+    activo = models.BooleanField(default=1)
     # Otros campos para la información de la pista
 
     def __str__(self):
@@ -27,7 +29,7 @@ class Reserva(models.Model):
     hora_fin = models.DateTimeField()
     updated = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField()
-
+    activo = models.BooleanField(default=1)
 
     def __str__(self):
         return f"Reserva de {self.usuario.username} en {self.pista} de {self.hora_inicio} a {self.hora_fin}" 
