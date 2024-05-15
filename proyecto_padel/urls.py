@@ -19,7 +19,7 @@ from django.urls import path
 from app_padel import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', views.login_app, name='login'),
+    path('', views.home, name='login'),
     path('login/', views.login_app, name='login'),
     path('inicio/', views.inicio, name='inicio'),
     path('registro/', views.registro, name='registro'),

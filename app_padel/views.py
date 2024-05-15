@@ -1,14 +1,18 @@
-from django.shortcuts import render, redirect,get_object_or_404
-from django.contrib.auth import authenticate, login , logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegistroForm,ReservaForm
-from .models import Club,Pista,Reserva
+from .forms import RegistroForm, ReservaForm
+from .models import Club, Pista, Reserva
 from django.http import JsonResponse
-
 
 # Create your views here.
 from django.http import HttpResponse
+
+
+def home(request):
+    return render(request, 'app_padel/home.html')
+
 
 def login_app(request):
     if request.method == 'POST':
@@ -25,8 +29,9 @@ def login_app(request):
             else:
                 # Si las credenciales son inválidas, muestra un mensaje de error
                 messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
-                return render(request, 'app_padel/login.html',{'error': "Usuario o Contraseña incorrectos"} )
+                return render(request, 'app_padel/login.html', {'error': "Usuario o Contraseña incorrectos"})
     return render(request, 'app_padel/login.html')
+
 
 @login_required
 def inicio(request):
@@ -35,7 +40,7 @@ def inicio(request):
         form = ReservaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('inicio') 
+            return redirect('inicio')
     if 'username' in request.POST:
         if request.POST['username']:
             vars['username'] = request.POST['username']
@@ -45,7 +50,8 @@ def inicio(request):
     vars['clubs'] = clubs
     form = ReservaForm()
     vars['form'] = form
-    return render(request, 'app_padel/inicio.html',vars) 
+    return render(request, 'app_padel/inicio.html', vars)
+
 
 def registro(request):
     if request.method == 'POST':
@@ -58,11 +64,13 @@ def registro(request):
         form = RegistroForm()
     return render(request, 'app_padel/registro.html', {'form': form})
 
+
 def logout_view(request):
     # Cierra la sesión del usuario
     logout(request)
     # Redirige a la página de inicio o a donde desees después del cierre de sesión
     return redirect('login')
+
 
 def crear_reserva(request):
     if request.method == 'POST':
@@ -75,6 +83,7 @@ def crear_reserva(request):
         form = ReservaForm()
     return render(request, 'app_padel/nuevaReserva.html', {'form': form})
 
+
 def obtener_numero_pistas(request):
     if request.method == 'GET' and 'club_id' in request.GET:
         club_id = request.GET['club_id']
@@ -84,11 +93,13 @@ def obtener_numero_pistas(request):
             return JsonResponse({'numero_pistas': numero_pistas})
     else:
         return JsonResponse({'error': 'No se proporcionó el ID del club'})
-    
+
+
 def misReservas(request):
     # Obtener todas las reservas del usuario actual
     reservas = Reserva.objects.filter(usuario=request.user)
     return render(request, 'app_padel/misReservas.html', {'reservas': reservas})
+
 
 def actualizarReserva(request, reserva_id):
     # Obtener la reserva a actualizar
@@ -106,6 +117,7 @@ def actualizarReserva(request, reserva_id):
         form = ReservaForm(instance=reserva)
 
     return render(request, 'app_padel/actualizar_reserva.html', {'form': form})
+
 
 def delete_reserva(request, reserva_id):
     # Obtener la reserva a eliminar
