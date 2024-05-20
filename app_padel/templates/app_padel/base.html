@@ -17,6 +17,13 @@
             <a class="logo" href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'misReservas' %}">Mis Reservas</a>
             <a href="{% url 'crear_reserva' %}">Reservar</a>
+            {% if club %}
+                <a href="#">Administrar Club</a>
+            {% endif %}
+            {% if user.is_superuser %}            
+            <a href="#">Añadir Clubs</a>
+            {% endif %}
+
             <a href="#">Clubs</a>
             <a href="#">Contacto</a>
         </div>

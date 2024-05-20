@@ -8,9 +8,7 @@ class Club(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.CharField(max_length=200)
     activo = models.BooleanField(default=1)
-    telefono = models.CharField(max_length=20)
-    email = models.EmailField(default="")
-
+    admin_id_id = models.IntegerField(default=0)
     # Otros campos para la información del club
 
     def __str__(self):

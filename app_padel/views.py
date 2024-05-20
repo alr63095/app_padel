@@ -36,6 +36,7 @@ def login_app(request):
 @login_required
 def inicio(request):
     vars = {}
+    user = request.user
     if request.method == 'POST':
         form = ReservaForm(request.POST)
         if form.is_valid():
@@ -46,7 +47,13 @@ def inicio(request):
             vars['username'] = request.POST['username']
         else:
             return login_app
+    vars['user'] = user
     clubs = Club.objects.all()
+    club = Club.objects.filter(admin_id_id=user.id)
+    if club.exists():
+        vars['club'] = club[0]
+    else:
+        vars['club'] = False
     vars['clubs'] = clubs
     form = ReservaForm()
     vars['form'] = form
