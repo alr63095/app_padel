@@ -1,0 +1,34 @@
+{% extends 'app_padel/base.html' %} 
+{% block content %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clubs Disponibles</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<body>
+    <div class="container" id="clubesDisponibles">
+        <h1 class="text-center my-5">Clubs Disponibles</h1>
+        {% for ciudad, clubs in ciudades.items %}
+            <div class="city-title">
+                <h2>{{ ciudad }}</h2>
+            </div>
+            <div class="club-container">
+                {% for club in clubs %}
+                    <div class="club">
+                        <h3>{{ club.nombre }}</h3>
+                        <p>{{ club.direccion }}</p>
+                        {% if club.detalles.imagen_principal %}
+                            <img src="data:image/png;base64,{{ club.detalles.imagen_principal }}" alt="Imagen principal">
+                        {% endif %}
+                        <p>{{ club.detalles.descripcion_larga }}</p>
+                        <p>Número de pistas: {{ club.detalles.numero_pistas }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock %}

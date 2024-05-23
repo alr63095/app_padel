@@ -1,127 +1,28 @@
 {% extends 'app_padel/base.html' %} 
 {% block content %}
-
+<title>App Padel - Inicio</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
  <!-- Contenido principal -->
  <div class="content" id="content">
-    <!-- Barra superior con icono de perfil -->
-    <div class="profile">
-        <i class="bi bi-person-fill"></i>
+    <div class="container">
+        <h1 class="mb-4">Bienvenido a App Padel</h1>
+        <h2 class="mb-4">Tu web de Reserva de Pistas de Padel</h2>
+        <div class="row mb-4">
+            <div class="col-sm-4">
+                <a href="{% url 'usuario' %}" class="btn btn-pastel btn-block">Usuario</a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{% url 'misReservas' %}" class="btn btn-pastel btn-block">Mis Reservas</a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{% url 'clubsDisponibles' %}" class="btn btn-pastel btn-block">Clubs Disponibles</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a href="{% url 'crear_reserva' %}" class="btn btn-large">Realiza Una Nueva Reserva</a>
+            </div>
+        </div>
     </div>
-    <h1>Bienvenido, {{ username }}</h1>
-    <!-- Botones en el centro -->
-    <div class="buttons">
-        <button class="button">Botón 1</button>
-        <button class="button">Botón 2</button>
-        <button class="button">Botón 3</button>
-    </div>
-    <h1>Selecciona un club:</h1>
-    <select id="club-selector">
-        <option value="-1">Selecciona</option>
-        {% for club in clubs %}
-            <option value="{{ club.id }}">{{ club.nombre }}</option>
-        {% endfor %}
-    </select>
-    <div class="contenedor-imagenes">
-        <!-- Aquí se mostrarán las imágenes de las pistas -->
-        {% for _ in clubs %}
-            <img class="imagen-pista">
-        {% endfor %}
-    </div>
-    <div id="contenedor-banners">
-
-    </div>
-</div>
-<!-- Modal para crear una reserva -->
-<div id="modal-reserva" class="modal">
-    <div class="modal-contenido">
-      <span class="cerrar">&times;</span>
-      <h2>Reservar pista</h2>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Crear Reserva</button>
-    </form>
-    </div>
-  </div>
- <!-- Tu script JavaScript aquí -->
- <script>
-     // Obtener referencia al elemento de selección
-     var clubSelector = document.getElementById('club-selector');
-    // Obtener referencia al contenedor de las imágenes
-    var contenedorImagenes = document.querySelector('.contenedor-imagenes');
-
-    function botonPistas(){
-        $('.banner-pista img').click(function() {
-        // Mostrar el modal
-            $('#modal-reserva').show();
-        });
-    }
-    // Asignar evento de cambio al elemento de selección
-    clubSelector.addEventListener('change', function() {
-        // Obtener el valor seleccionado
-        var clubId = this.value;
-        if (clubId > 0){
-            $.ajax({
-            url: '/obtener_numero_pistas/',
-            method: 'GET',
-            data: {club_id: clubId},
-            success: function(response) {
-                // Limpiar el contenedor de banners
-                $('#contenedor-banners').empty();
-                // Iterar sobre las pistas y crear un banner para cada una
-                for (var i = 0; i < response.numero_pistas; i++) {
-                    // Crear un nuevo elemento div para el banner de la pista
-                    var banner = $('<div class="banner-pista" style="padding:1em;"></div>');
-                    // Crear un elemento img para la imagen de la pista
-                    var imagen = $('<img src="../../static/images/pista_padel.jpg">');
-
-                    // Agregar la imagen al banner
-                    banner.append(imagen);
-
-                    // Agregar el banner al contenedor
-                    $('#contenedor-banners').append(banner);
-                    botonPistas();
-                };
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al cargar las pistas del club:', error);
-            }
-        });
-        }
-        contenedorImagenes.innerHTML = "";
-    });
-
-    $(document).ready(function() {
-        $('#modal-reserva').hide();
-        // Manejar el evento de clic en la imagen del banner
-        $('.banner-pista img').click(function() {
-            // Mostrar el modal
-            $('#modal-reserva').show();
-        });
-
-        // Manejar el evento de clic en el botón de cerrar del modal
-        $('#modal-reserva .cerrar').click(function() {
-            // Ocultar el modal
-            $('#modal-reserva').hide();
-        });
-
-        // Manejar el envío del formulario de reserva
-        $('#formulario-reserva').submit(function(event) {
-            // Prevenir el envío del formulario
-            event.preventDefault();
-
-            // Aquí puedes manejar el envío del formulario utilizando AJAX
-            // Por ejemplo, puedes enviar los datos del formulario a tu servidor y procesarlos en tu aplicación Django
-        });
-        
-        // Evento de cambio en el selector de clubes
-        $('#club-selector').change(function() {
-            // Obtener el ID del club seleccionado
-            var clubId = $(this).val();
-
-        });
-        
-    });
-</script>
-
+ </div> 
 {% endblock %}

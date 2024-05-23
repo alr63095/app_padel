@@ -16,6 +16,7 @@ body {
     padding-top: 60px;
     transition: left 0.3s ease, opacity 0.3s ease; /* Añadir transición de opacidad */
     opacity: 0.9; /* Opacidad inicial */
+    z-index: 2;
 }
 
 .active {
@@ -96,6 +97,17 @@ body {
     border-radius: 20px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+.person-btn {
+    position: absolute;
+    bottom: 10px; /* Colocarlo en la parte inferior */
+    left: 90px; /* Colocarlo en la parte izquierda */
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #666;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
 .logout-btn:hover {
     background-color: #333;
@@ -143,4 +155,87 @@ body {
     right: 10px;
     cursor: pointer;
     font-size: 20px;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    text-align: center;
+    border: 1px solid #000; /* Borde negro fino */
+    border-radius: 8px; /* Esquinas redondeadas */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
+    position: relative;
+    z-index: 2;
+}
+.btn-pastel {
+    background-color: #8ecae6;
+    color: #fff;
+    border: 1px solid #000; /* Borde negro fino */
+    border-radius: 4px; /* Esquinas redondeadas */
+    transition: background-color 0.3s ease;
+}
+.btn-pastel:hover {
+    background-color: #219ebc;
+}
+.btn-large {
+    background-color: #ffb703;
+    color: #fff;
+    border: 1px solid #000; /* Borde negro fino */
+    border-radius: 4px; /* Esquinas redondeadas */
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+.btn-large:hover {
+    background-color: #fb8500;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+    z-index: 1;
+}
+.club-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.club {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    flex: 1 1 30%;
+    max-width: 30%;
+    text-align: center;
+}
+.club img {
+    width: 100%;
+    border-radius: 8px;
+}
+.city-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+@media (max-width: 768px) {
+    .club {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+#clubesDisponibles{
+    padding-top: 25%;
 }

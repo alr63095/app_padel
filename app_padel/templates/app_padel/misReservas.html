@@ -1,23 +1,44 @@
 {% extends 'app_padel/base.html' %} 
 {% block content %}
-<body>
-    
-    <h1>Mis Reservas</h1>
-    <ul>
+<title>App Padel - Mis Reservas</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+ <!-- Contenido principal -->
+ <div class="content" id="content">
+    <div class="container">
+        <h2 class="mb-4">Reservas Activas</h2>
+        <hr size="1px" color="black" />
         {% for reserva in reservas %}
-            <div class="row">
-                <div class="card w-75 col m-2">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ reserva.fecha}}</h5>
-                        <p class="card-text">{{ reserva.hora }}</p>
-                        <p class="card-text">{{ reserva.pista }}</p>
-                        <a href={% url "actualizarReserva" reserva.id %} class="btn btn-primary">Update</a>
-                        <a href={% url "delete" reserva.id %} class="btn btn-danger">Delete</a>
-                    </div>
+            <div class="row mb-6 pt-2">
+                <div class="col-sm-5">
+                    <p class="card-text">{{ reserva.hora_inicio }}</p>
+                </div>
+                <div class="col-sm-5">
+                    <p class="card-text">{{ reserva.pista }}</p>
+                </div>
+                <div class="col-sm-2">
+                    <a href={% url "delete" reserva.id %} class="btn btn-danger">Delete</a>
+                </div>
+            </div> 
+            <hr size="1px" color="black" /> 
+        {% endfor %}
+    </div>
+    <br>
+    <br>
+    <div class="container">
+        <h2 class="mb-4">Historial de Reservas</h2>
+        <hr size="1px" color="black" />
+        {% for reserva in reservas %}
+            <div class="row mb-6 pt-2">
+                <div class="col-sm-4">
+                    <p class="card-text">{{ reserva.hora_inicio }}</p>
+                </div>
+                <div class="col-sm-8">
+                    <p class="card-text">{{ reserva.pista }}</p>
                 </div>
             </div>
+            <hr size="1px" color="black" /> 
         {% endfor %}
-    </ul>
-</body>
+    </div>
+ </div> 
 
 {% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'app_padel/base.html' %} 
+{% block content %}
+<title>Detalles del Club</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Detalles del Club</h1>
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_ubicacion">Ubicación</label>
+                <input type="text" class="form-control" id="id_ubicacion" name="ubicacion" required>
+                <div class="invalid-feedback">
+                    Por favor, ingrese la ubicación.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_descripcion_larga">Descripción Larga</label>
+                <textarea class="form-control" id="id_descripcion_larga" name="descripcion_larga" rows="3" required></textarea>
+                <div class="invalid-feedback">
+                    Por favor, ingrese una descripción.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_numero_pistas">Número de Pistas</label>
+                <input type="number" class="form-control" id="id_numero_pistas" name="numero_pistas" required>
+                <div class="invalid-feedback">
+                    Por favor, ingrese el número de pistas.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_imagen_principal">Imagen Principal</label>
+                <input type="file" class="form-control-file" id="id_imagen_principal" name="imagen_principal" required>
+                <div class="invalid-feedback">
+                    Por favor, cargue la imagen principal.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_imagen_secundaria">Imagen Secundaria</label>
+                <input type="file" class="form-control-file" id="id_imagen_secundaria" name="imagen_secundaria" required>
+                <div class="invalid-feedback">
+                    Por favor, cargue la imagen secundaria.
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+
+    <!-- Scripts de Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Validación de Bootstrap -->
+    <script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+{% endblock %}

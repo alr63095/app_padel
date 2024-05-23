@@ -8,7 +8,7 @@ class Club(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.CharField(max_length=200)
     activo = models.BooleanField(default=1)
-    admin_id_id = models.IntegerField(default=0)
+    admin_id_id = models.ForeignKey(User,on_delete=models.CASCADE)
     # Otros campos para la información del club
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Pista(models.Model):
     # Otros campos para la información de la pista
 
     def __str__(self):
-        return f"Pista {self.descripcion} - {self.club.nombre}"
+        return f"Pista {self.numero} - {self.descripcion} - {self.club.nombre}"
 
 
 class Reserva(models.Model):
@@ -42,3 +42,14 @@ class Reserva(models.Model):
 
 class Dimensiones(models.Model):
     horas_disponibles = models.CharField(max_length=50)
+
+class DetallesClub(models.Model):
+    club = models.OneToOneField(Club, on_delete=models.CASCADE, primary_key=True,related_name='detalles')
+    ubicacion = models.CharField(max_length=255)
+    descripcion_larga = models.TextField()
+    numero_pistas = models.IntegerField()
+    imagen_principal = models.TextField()
+    imagen_secundaria = models.TextField()
+
+    def __str__(self):
+        return self.club.nombre

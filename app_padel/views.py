@@ -2,13 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegistroForm, ReservaForm
-from .models import Club, Pista, Reserva
-from django.http import JsonResponse
-
-# Create your views here.
-from django.http import HttpResponse
-
+from .forms import RegistroForm, ReservaForm,DetallesClubForm
+from .models import Club, Pista, Reserva , DetallesClub
+from django.http import JsonResponse,HttpResponse
+from .funciones import convert_base64_to_image,convert_image_to_base64
 
 def home(request):
     return render(request, 'app_padel/home.html')
@@ -59,6 +56,14 @@ def inicio(request):
     vars['form'] = form
     return render(request, 'app_padel/inicio.html', vars)
 
+@login_required
+def usuario(request):
+    usuario_actual = request.user
+    context = {
+        'usuario': usuario_actual,
+    }
+    return render(request, 'app_padel/usuario.html', context)
+
 
 def registro(request):
     if request.method == 'POST':
@@ -104,7 +109,7 @@ def obtener_numero_pistas(request):
 
 def misReservas(request):
     # Obtener todas las reservas del usuario actual
-    reservas = Reserva.objects.filter(usuario=request.user)
+    reservas = Reserva.objects.filter(usuario=request.user).filter(activo=True)
     return render(request, 'app_padel/misReservas.html', {'reservas': reservas})
 
 
@@ -133,4 +138,35 @@ def delete_reserva(request, reserva_id):
     # Cambiar el valor de 'activo' a False
     reserva.activo = False
     reserva.save()
-    return redirect('inicio')
+    return redirect('misReservas')
+
+def create_detalles_club(request):
+    if request.method == 'POST':
+        form = DetallesClubForm(request.POST, request.FILES)
+        if form.is_valid():
+            detalles_club = form.save(commit=False)
+            if 'imagen_principal' in request.FILES:
+                detalles_club.imagen_principal = convert_image_to_base64(request.FILES['imagen_principal'])
+            if 'imagen_secundaria' in request.FILES:
+                detalles_club.imagen_secundaria = convert_image_to_base64(request.FILES['imagen_secundaria'])
+            detalles_club.save()
+            return redirect('inicio')
+    else:
+        form = DetallesClubForm()
+    return render(request, 'app_padel/detalles_club_form.html', {'form': form})
+
+def clubs_disponibles(request):
+    clubs = Club.objects.all()
+    ciudades = {}
+
+    for club in clubs:
+        ciudad = club.direccion.split(',')[-1].strip()
+        if ciudad not in ciudades:
+            ciudades[ciudad] = []
+        ciudades[ciudad].append(club)
+
+    context = {
+        'ciudades': ciudades,
+        'clubs': clubs
+    }
+    return render(request, 'app_padel/clubsDisponibles.html', context)

@@ -1,0 +1,48 @@
+{% extends 'app_padel/base.html' %} 
+{% block content %}
+    <title>Información del Usuario - App Padel</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            border: 1px solid #000;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-top: 20px;
+        }
+        .user-info {
+            margin-bottom: 20px;
+        }
+        .user-info label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="content-container">
+            <h1 class="mb-4">Información del Usuario</h1>
+            <div class="user-info">
+                <label>Nombre de Usuario:</label>
+                <p>{{ usuario.username }}</p>
+            </div>
+            <div class="user-info">
+                <label>Nombre Completo:</label>
+                <p>{{ usuario.get_full_name }}</p>
+            </div>
+            <div class="user-info">
+                <label>Email:</label>
+                <p>{{ usuario.email }}</p>
+            </div>
+            <div class="user-info">
+                <label>Fecha de Registro:</label>
+                <p>{{ usuario.date_joined }}</p>
+            </div>
+            <!-- Agrega más campos según sea necesario -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock %}

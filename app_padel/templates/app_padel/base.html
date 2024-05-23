@@ -21,13 +21,14 @@
                 <a href="#">Administrar Club</a>
             {% endif %}
             {% if user.is_superuser %}            
-            <a href="#">Añadir Clubs</a>
+                <a href="#">Añadir Club</a>
             {% endif %}
 
-            <a href="#">Clubs</a>
+            <a href="{% url 'clubsDisponibles' %}">Clubs</a>
             <a href="#">Contacto</a>
         </div>
         <!-- Botón de salir -->
+        <a href="{% url 'usuario' %}" class="person-btn bi bi-person-lines-fill"></a>
         <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
     </div>
 
@@ -38,6 +39,7 @@
         <div class="bar"></div>
     </div>
     <div id="contenido-bloque">
+    <div class="overlay"></div>
     {% block content %}
     {% endblock %}
     </div>
