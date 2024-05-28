@@ -167,7 +167,7 @@ body {
 }
 .container {
     text-align: center;
-    border: 1px solid #000; /* Borde negro fino */
+    /* border: 1px solid #000; Borde negro fino */
     border-radius: 8px; /* Esquinas redondeadas */
     padding: 20px;
     background-color: #ffffff; /* Fondo blanco para el contenedor */
@@ -238,4 +238,17 @@ body {
 }
 #clubesDisponibles{
     padding-top: 25%;
+}
+.content-container {
+    /* border: 1px solid #000; */
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #ffffff;
+    margin-top: 20px;
+}
+.user-info {
+    margin-bottom: 20px;
+}
+.user-info label {
+    font-weight: bold;
 }

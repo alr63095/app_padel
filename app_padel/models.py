@@ -16,7 +16,7 @@ class Club(models.Model):
 
 
 class Pista(models.Model):
-    club = models.ForeignKey(Club, on_delete=models.CASCADE)
+    club = models.ForeignKey(Club,related_name='pistas', on_delete=models.CASCADE)
     numero = models.IntegerField()
     descripcion = models.CharField(max_length=100, default="")
     activo = models.BooleanField(default=1)

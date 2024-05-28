@@ -39,7 +39,7 @@
         <div class="bar"></div>
     </div>
     <div id="contenido-bloque">
-    <div class="overlay"></div>
+    <!-- <div class="overlay"></div> -->
     {% block content %}
     {% endblock %}
     </div>
@@ -52,6 +52,9 @@
             content.classList.toggle("active");
         }
         $("#contenido-bloque").css("text-align", "center");
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0); // Asegura que la página se desplaza hacia la parte superior al cargar
+        });
     </script>
 </body>
 </html>

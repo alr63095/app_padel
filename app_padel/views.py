@@ -3,9 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegistroForm, ReservaForm,DetallesClubForm
-from .models import Club, Pista, Reserva , DetallesClub
+from .models import Club, Pista, Reserva , DetallesClub , Dimensiones
 from django.http import JsonResponse,HttpResponse
 from .funciones import convert_base64_to_image,convert_image_to_base64
+from django.utils import timezone
+from datetime import datetime, timedelta
 
 def home(request):
     return render(request, 'app_padel/home.html')
@@ -84,7 +86,7 @@ def logout_view(request):
     return redirect('login')
 
 
-def crear_reserva(request):
+def crear_reserva_antiguo(request):
     if request.method == 'POST':
         form = ReservaForm(request.POST)
         if form.is_valid():
@@ -92,9 +94,83 @@ def crear_reserva(request):
             # Redirigir a alguna página después de crear la reserva (por ejemplo, la página de inicio)
             return redirect('inicio')
     else:
+        vars = {}
+        user = request.user
+        vars['user'] = user
+        clubs = Club.objects.all()
+        club = Club.objects.filter(admin_id_id=user.id)
+        if club.exists():
+            vars['club'] = club[0]
+        else:
+            vars['club'] = False
+        vars['clubs'] = clubs
         form = ReservaForm()
-    return render(request, 'app_padel/nuevaReserva.html', {'form': form})
+        vars['form'] = form
+    return render(request, 'app_padel/nuevaReserva.html', {'vars': vars})
 
+def crear_reserva(request):
+    #horas = [f"{hour:02d}:00" for hour in range(8, 23)] + [f"{hour:02d}:30" for hour in range(8, 22)]
+    horas_dim = Dimensiones.objects.all()
+    horas_list = horas_dim.values_list('horas_disponibles', flat=True).order_by('horas_disponibles')
+    horas = []
+    for h in horas_list:
+        horas.append(h)
+    horas.sort()
+    if request.method == "POST":
+        fecha = request.POST.get('fecha')
+        hora = request.POST.get('hora')
+        ciudad = request.POST.get('ciudad', '')
+
+        if not fecha or not hora:
+            return render(request, 'app_padel/nuevaReserva.html', {'error': 'Debe seleccionar una fecha y una hora', 'horas': horas})
+
+        fecha_hora = f"{fecha} {hora}"
+        fecha_hora_dt = timezone.datetime.strptime(fecha_hora, '%Y-%m-%d %H:%M')
+
+        # Filtrar reservas activas para la fecha y hora seleccionadas
+        reservas = Reserva.objects.filter(hora_inicio=fecha_hora_dt, activo=True)
+
+        # Obtener pistas no reservadas
+        pistas_reservadas = reservas.values_list('pista_id', flat=True)
+        pistas_disponibles = Pista.objects.exclude(id__in=pistas_reservadas)
+
+        if ciudad:
+            clubs = Club.objects.filter(direccion__icontains=ciudad, pistas__in=pistas_disponibles).distinct()
+        else:
+            clubs = Club.objects.filter(pistas__in=pistas_disponibles).distinct()
+
+        return render(request, 'app_padel/nuevaReserva.html', {
+            'horas': horas,
+            'clubs': clubs,
+            'fecha': fecha,
+            'hora': hora,
+            'ciudad': ciudad
+        })
+
+    return render(request, 'app_padel/nuevaReserva.html', {'horas': horas})
+
+def reserva_pista(request, pista_id):
+    pista = get_object_or_404(Pista, id=pista_id)
+
+    if request.method == 'POST':
+        fecha = request.POST.get('fecha')
+        hora = request.POST.get('hora')
+        fecha_hora = f"{fecha} {hora}"
+        fecha_hora_dt = timezone.datetime.strptime(fecha_hora, '%Y-%m-%d %H:%M')
+        hora_fin =  fecha_hora_dt + timedelta(minutes=90)
+        # Crear la reserva
+        Reserva.objects.create(
+            pista=pista,
+            usuario=request.user,
+            hora_inicio=fecha_hora_dt,
+            hora_fin = hora_fin,
+            created = datetime.now(),
+            activo=True
+        )
+        return redirect('misReservas')
+    fecha = request.GET.get('fecha')
+    hora = request.GET.get('hora')
+    return render(request, 'app_padel/reservaPista.html', {'pista': pista ,'fecha': fecha, 'hora': hora })
 
 def obtener_numero_pistas(request):
     if request.method == 'GET' and 'club_id' in request.GET:

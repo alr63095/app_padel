@@ -1,0 +1,31 @@
+{% extends 'app_padel/base.html' %} 
+{% block content %}
+<title>Reservar Pista</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Reservar Pista {{ pista.numero }}</h1>
+    <form method="POST" action="{% url 'reservaPista' pista.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="fecha" value="{{ fecha }}">
+        <input type="hidden" name="hora" value="{{ hora }}">
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ fecha }}" required readonly>
+        </div>
+        <div class="form-group">
+            <label for="hora">Hora:</label>
+            <input type="text" class="form-control" id="hora" name="hora" value="{{ hora }}" required readonly>
+                {% for hora in horas %}
+                    <option value="{{ hora }}">{{ hora }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Reservar</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+{% endblock %}
