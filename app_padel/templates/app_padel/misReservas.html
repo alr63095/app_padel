@@ -7,37 +7,45 @@
     <div class="container">
         <h2 class="mb-4">Reservas Activas</h2>
         <hr size="1px" color="black" />
-        {% for reserva in reservas %}
-            <div class="row mb-6 pt-2">
-                <div class="col-sm-5">
-                    <p class="card-text">{{ reserva.hora_inicio }}</p>
-                </div>
-                <div class="col-sm-5">
-                    <p class="card-text">{{ reserva.pista }}</p>
-                </div>
-                <div class="col-sm-2">
-                    <a href={% url "delete" reserva.id %} class="btn btn-danger">Cancelar</a>
-                </div>
-            </div> 
-            <hr size="1px" color="black" /> 
-        {% endfor %}
+        {% if reservas_activas %}
+            {% for reserva in reservas_activas %}
+                <div class="row mb-6 pt-2">
+                    <div class="col-sm-5">
+                        <p class="card-text">{{ reserva.hora_inicio }}</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <p class="card-text">{{ reserva.pista }}</p>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href={% url "delete" reserva.id %} class="btn btn-danger">Cancelar</a>
+                    </div>
+                </div> 
+                <hr size="1px" color="black" /> 
+            {% endfor %}
+        {% else %}
+            <p>No dispones de Reservas Activas en este momento</p>
+        {% endif %}
     </div>
     <br>
     <br>
     <div class="container">
         <h2 class="mb-4">Historial de Reservas</h2>
         <hr size="1px" color="black" />
-        {% for reserva in reservas %}
-            <div class="row mb-6 pt-2">
-                <div class="col-sm-4">
-                    <p class="card-text">{{ reserva.hora_inicio }}</p>
+        {% if reservas_historico %}
+            {% for reserva in reservas_historico %}
+                <div class="row mb-6 pt-2">
+                    <div class="col-sm-4">
+                        <p class="card-text">{{ reserva.hora_inicio }}</p>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="card-text">{{ reserva.pista }}</p>
+                    </div>
                 </div>
-                <div class="col-sm-8">
-                    <p class="card-text">{{ reserva.pista }}</p>
-                </div>
-            </div>
-            <hr size="1px" color="black" /> 
-        {% endfor %}
+                <hr size="1px" color="black" /> 
+            {% endfor %}
+        {% else %}
+            <p>No hay Reservas en el historico</p>
+        {% endif %}
     </div>
  </div> 
 

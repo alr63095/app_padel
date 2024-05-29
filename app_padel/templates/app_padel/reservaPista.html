@@ -2,8 +2,9 @@
 {% block content %}
 <title>Reservar Pista</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<body>
-<div class="container mt-5">
+
+<div class="content" id="content">
+    <div class="container mt-5">
     <h1 class="text-center">Reservar Pista {{ pista.numero }}</h1>
     <form method="POST" action="{% url 'reservaPista' pista.id %}">
         {% csrf_token %}
@@ -23,9 +24,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Reservar</button>
     </form>
-</div>
+    </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+</div>
 {% endblock %}

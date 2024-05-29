@@ -14,7 +14,8 @@
      <div class="sidebar" id="sidebar">
         <!-- Opciones de menú -->
         <div class="menu-options" id="menuOptions">
-            <a class="logo" href="{% url 'inicio' %}">Inicio</a>
+            <!-- <a class="logo" href="{% url 'inicio' %}">Inicio</a> -->
+            <a href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'misReservas' %}">Mis Reservas</a>
             <a href="{% url 'crear_reserva' %}">Reservar</a>
             {% if club %}

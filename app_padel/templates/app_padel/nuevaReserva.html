@@ -5,29 +5,38 @@
  <!-- Contenido principal -->
  <div class="content" id="content">
     <div class="container mt-5">
-        <h1 class="text-center">Crear Reserva</h1>
+        <h1 class="text-center">Nueva Reserva</h1>
         <form id="reservaForm" method="POST" action="{% url 'crear_reserva' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="fecha">Fecha:</label>
-                <input type="date" class="form-control" id="fecha" name="fecha" required>
+                <div class="row mb-6 pt-2" style="align-items: end;">
+                    <div class="col-sm-3">
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" min="{{ hoy }}" required>
+                    </div>
+                    <div class="col-sm-3">    
+                        <label for="hora">Hora:</label>
+                        <select class="form-control" id="hora" name="hora" required>
+                        {% for hora in horas %}
+                            <option value="{{ hora }}">{{ hora }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="ciudad">Ciudad:</label>
+                        <select class="form-control" id="ciudad" name="ciudad">
+                            {% for ciudad in ciudades %}
+                                <option value="{{ ciudad.direccion }}">{{ ciudad.direccion }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </div>
             </div>
-            <div class="form-group">
-                <label for="hora">Hora:</label>
-                <select class="form-control" id="hora" name="hora" required>
-                    {% for hora in horas %}
-                        <option value="{{ hora }}">{{ hora }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="ciudad">Ciudad:</label>
-                <input type="text" class="form-control" id="ciudad" name="ciudad">
-            </div>
-            <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
         <div id="resultados" class="mt-5">
-            {% if clubs %}
+            {% if clubs or not error %}
                 {% for club in clubs %}
                     <div class="card mb-3">
                         <div class="card-header">
@@ -51,8 +60,10 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% else %}
+            {% elif not error %}
                 <p>No hay clubs ni pistas disponibles para los criterios seleccionados.</p>
+            {% else %}
+                    <p>{{ error }}</p>
             {% endif %}
         </div>
     </div>

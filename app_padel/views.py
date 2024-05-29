@@ -116,13 +116,18 @@ def crear_reserva(request):
     for h in horas_list:
         horas.append(h)
     horas.sort()
+    ciudades = Club.objects.values('direccion').distinct()
+    hoy = timezone.now().date().isoformat()
     if request.method == "POST":
         fecha = request.POST.get('fecha')
         hora = request.POST.get('hora')
         ciudad = request.POST.get('ciudad', '')
 
         if not fecha or not hora:
-            return render(request, 'app_padel/nuevaReserva.html', {'error': 'Debe seleccionar una fecha y una hora', 'horas': horas})
+            return render(request, 'app_padel/nuevaReserva.html', {'horas': horas ,'ciudades': ciudades, 'hoy' : hoy,'error': 'Debe seleccionar una fecha y una hora'})
+        # Verificación del lado del servidor
+        if fecha and timezone.datetime.strptime(fecha, '%Y-%m-%d').date() < timezone.now().date():
+            return render(request, 'app_padel/nuevaReserva.html', {'horas': horas ,'ciudades': ciudades, 'hoy' : hoy,'error': 'Debe seleccionar una fecha igual o superior al dia de hoy'})
 
         fecha_hora = f"{fecha} {hora}"
         fecha_hora_dt = timezone.datetime.strptime(fecha_hora, '%Y-%m-%d %H:%M')
@@ -144,10 +149,12 @@ def crear_reserva(request):
             'clubs': clubs,
             'fecha': fecha,
             'hora': hora,
-            'ciudad': ciudad
+            'ciudad': ciudad,
+            'ciudades': ciudades, 
+            'hoy' : hoy
         })
 
-    return render(request, 'app_padel/nuevaReserva.html', {'horas': horas})
+    return render(request, 'app_padel/nuevaReserva.html', {'horas': horas ,'ciudades': ciudades, 'hoy' : hoy})
 
 def reserva_pista(request, pista_id):
     pista = get_object_or_404(Pista, id=pista_id)
@@ -185,8 +192,10 @@ def obtener_numero_pistas(request):
 
 def misReservas(request):
     # Obtener todas las reservas del usuario actual
-    reservas = Reserva.objects.filter(usuario=request.user).filter(activo=True)
-    return render(request, 'app_padel/misReservas.html', {'reservas': reservas})
+    fecha_actual = datetime.now()
+    reservas_activas = Reserva.objects.filter(usuario=request.user).filter(activo=True).filter(hora_inicio__gt=fecha_actual)
+    reservas_historico = Reserva.objects.filter(usuario=request.user).filter(activo=True).filter(hora_inicio__lt=fecha_actual)
+    return render(request, 'app_padel/misReservas.html', {'reservas_activas': reservas_activas,'reservas_historico': reservas_historico})
 
 
 def actualizarReserva(request, reserva_id):
@@ -214,7 +223,7 @@ def delete_reserva(request, reserva_id):
     # Cambiar el valor de 'activo' a False
     reserva.activo = False
     reserva.save()
-    return redirect('misReservas')
+    return misReservas(request)
 
 def create_detalles_club(request):
     if request.method == 'POST':
